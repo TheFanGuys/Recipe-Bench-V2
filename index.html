@@ -294,6 +294,17 @@ img{max-width:100%}
 
 .cattile .ph{transition:transform 1.2s var(--ease),opacity 1.4s ease}.cattile .ph2{opacity:0}
 
+.rackwrap{margin:0;height:min(71svh,645px);min-height:450px;border:1px solid #b8814a49;border-radius:24px;overflow:hidden;background:radial-gradient(ellipse at 50% 38%,#402b1d 0%,#231811 45%,#15100d 85%);box-shadow:inset 0 1px #ecc18a24,0 18px 42px #0005}
+#rackCanvas{touch-action:none}
+#rackCanvas:active{cursor:grabbing}
+#rackCanvas:focus-visible{outline:2px solid #efbe7e;outline-offset:-3px}
+.rackhint{top:12px;color:#e8c99f;background:#21160ff2;letter-spacing:.08em}
+.racktiers{bottom:9px;padding:0 10px}
+.racktiers button,.rackzoom button{backdrop-filter:none;-webkit-backdrop-filter:none;background:#251a13;border-color:#a175494f}
+.racktiers button{min-height:38px}
+.rackzoom{right:8px}
+.rackzoom button{width:39px;height:42px}
+
 </style>
 <style>#scene{opacity:0;transition:opacity .8s ease}#scene.ready{opacity:1}</style>
 </head>
@@ -2664,7 +2675,7 @@ var SPICE_ORDER=['blackpepper','whitepepper','paprika','smokedpaprika','cayenne'
 SPICE_TIERS=['Peppers & Chiles','Herbs','More Herbs & Blends','Warm & Sweet','Seeds','Roots & Specialty','Basics & Salts','Seasoning Blends'];
 SPICES=SPICE_ORDER.map(function(id,i){var s=SPICES.filter(function(x){return x.id===id})[0];s.tier=Math.floor(i/10);return s});
 
-// ==== Spice Rack: 3D rotating rack of glass bottles ====
+// ==== Spice Rack: Perspective rotating spice rack ====
 function spiceRecipes(sp){
   var out=[];
   R.forEach(function(r){
@@ -2675,8 +2686,9 @@ function spiceRecipes(sp){
 }
 var RACK={inited:false};
 function renderRack(){
+  if(RACK.stop)RACK.stop();
   var b=$('toolBody');
-  b.innerHTML='<div class="rackwrap"><canvas id="rackCanvas" aria-label="Spice rack. Drag to spin, tap a bottle."></canvas>'+
+  b.innerHTML='<div class="rackwrap"><canvas id="rackCanvas" tabindex="0" aria-label="Spice rack. Drag or use arrow keys to spin. Tap a bottle or use the spice list."></canvas>'+
    '<div class="rackhint" id="rackHint">Drag to spin · Tap a bottle</div>'+
    '<div class="rackzoom"><button type="button" id="rzIn" aria-label="Zoom in">+</button><button type="button" id="rzOut" aria-label="Zoom out">\u2212</button><button type="button" id="rzAll" aria-label="Show whole rack">\u2922</button></div>'+
    '<div class="racktiers" id="rackTiers"></div></div>'+
@@ -2703,16 +2715,17 @@ function renderRack(){
   var old=document.querySelectorAll('body>.spicesheet');Array.prototype.forEach.call(old,function(n){n.remove()});
   document.body.appendChild($('spiceSheet'));
   $('ssClose').addEventListener('click',closeSpice);
-  $('rzIn').addEventListener('click',function(){RACK.zoom(1/1.35)});
-  $('rzOut').addEventListener('click',function(){RACK.zoom(1.35)});
+  $('rzIn').addEventListener('click',function(){if(RACK.zoom)RACK.zoom(1/1.35)});
+  $('rzOut').addEventListener('click',function(){if(RACK.zoom)RACK.zoom(1.35)});
   $('rzAll').addEventListener('click',function(){RACK.goTier&&RACK.goTier(null)});
   initRack3D();
 }
-function closeSpice(){var s=$('spiceSheet');if(s){s.classList.remove('open');s.setAttribute('aria-hidden','true')}if(RACK.sel!=null)RACK.sel=null}
+function closeSpice(){var s=$('spiceSheet');if(s){s.classList.remove('open');s.setAttribute('aria-hidden','true')}if(RACK.sel!=null){RACK.sel=null;if(RACK.wake)RACK.wake()}}
 function openSpice(id,spin){
   var sp=SPICES.filter(function(s){return s.id===id})[0];if(!sp) return;
   if(spin) rackSpinTo(id,false);
   RACK.sel=id;
+  if(RACK.wake)RACK.wake();
   var recs=spiceRecipes(sp);
   var body='<div class="sshead"><div class="ssjar" style="--c1:'+sp.c[1]+';--c0:'+sp.c[0]+'"></div><div><div class="sstier">'+SPICE_TIERS[sp.tier]+'</div><h2 class="ssname">'+sp.name+'</h2></div></div>'+
     '<p class="ssov">'+sp.ov+'</p>'+
@@ -2734,166 +2747,235 @@ function rackSpinTo(id,highlightOnly){
   // shortest turn that brings this bottle to the front
   var target=-b.angle,cur=RACK.rot,d=((target-cur)%(Math.PI*2)+Math.PI*3)%(Math.PI*2)-Math.PI;
   RACK.targetRot=cur+d;RACK.vel=0;
-  if(RACK.goTier){RACK.goTier(b.sp.tier);RACK.tD=6.6}
-  if(highlightOnly) RACK.hl=id;
+  if(RACK.goTier)RACK.goTier(b.sp.tier);
+  RACK.hl=highlightOnly?id:null;
+  RACK.wake();
 }
 function rackFocusTier(i){if(RACK.goTier)RACK.goTier(RACK.focusTier===i?null:i)}
-function spiceTexture(sp){
-  var c=document.createElement('canvas');c.width=128;c.height=256;var x=c.getContext('2d');
-  var g=x.createLinearGradient(0,0,0,256);g.addColorStop(0,sp.c[1]);g.addColorStop(1,sp.c[0]);x.fillStyle=g;x.fillRect(0,0,128,256);
-  var seed=sp.id.length*977;function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
-  function shade(hex,amt){var n=parseInt(hex.slice(1),16),r=(n>>16)+amt,gg=((n>>8)&255)+amt,b=(n&255)+amt;r=Math.max(0,Math.min(255,r));gg=Math.max(0,Math.min(255,gg));b=Math.max(0,Math.min(255,b));return 'rgb('+r+','+gg+','+b+')'}
-  var N={powder:2600,flake:500,leaf:700,seed:900,crystal:500,chunk:260,bay:40,star:26,pod:14,thread:420,berry:200,chunk2:600,seedmix:1100}[sp.t]||1500;
-  for(var i=0;i<N;i++){
-    var px=rnd()*128,py=rnd()*256;x.fillStyle=shade(rnd()<.5?sp.c[0]:sp.c[1],Math.round((rnd()-.5)*(sp.t==='powder'?50:90)));
-    x.globalAlpha=.5+rnd()*.5;
-    if(sp.t==='powder'){x.fillRect(px,py,1.4,1.4)}
-    else if(sp.t==='flake'){x.fillStyle=rnd()<.25?'#e8b860':shade(sp.c[1],Math.round((rnd()-.5)*60));x.beginPath();x.moveTo(px,py);x.lineTo(px+3+rnd()*4,py+rnd()*3);x.lineTo(px+rnd()*3,py+3+rnd()*4);x.fill()}
-    else if(sp.t==='leaf'){x.save();x.translate(px,py);x.rotate(rnd()*6.3);x.fillRect(-3,-1,5+rnd()*4,2);x.restore()}
-    else if(sp.t==='seed'){x.beginPath();x.ellipse(px,py,2.4,1.4,rnd()*6.3,0,6.3);x.fill()}
-    else if(sp.t==='crystal'){x.fillStyle=rnd()<.5?'#ffffff':'#d9d6cf';x.save();x.translate(px,py);x.rotate(rnd()*6.3);x.fillRect(-2.5,-2.5,4+rnd()*3,4+rnd()*3);x.restore()}
-    else if(sp.t==='bay'){x.save();x.translate(px,py);x.rotate(rnd()*6.3);x.beginPath();x.ellipse(0,0,13,5,0,0,6.3);x.fill();x.strokeStyle='rgba(255,255,230,.35)';x.lineWidth=.8;x.beginPath();x.moveTo(-12,0);x.lineTo(12,0);x.stroke();x.restore()}
-    else if(sp.t==='star'){x.save();x.translate(px,py);x.rotate(rnd()*6.3);for(var k=0;k<8;k++){x.rotate(Math.PI/4);x.beginPath();x.ellipse(5,0,5,2.2,0,0,6.3);x.fill()}x.fillStyle='#c9a46a';x.beginPath();x.arc(0,0,1.6,0,6.3);x.fill();x.restore()}
-    else if(sp.t==='pod'){x.save();x.translate(px,py);x.rotate(rnd()*.5-.25+Math.PI/2);x.fillRect(-60,-2.5,120,5);x.restore()}
-    else if(sp.t==='thread'){x.strokeStyle=rnd()<.15?'#f0a020':shade(sp.c[1],Math.round((rnd()-.5)*60));x.lineWidth=1.2;x.beginPath();x.moveTo(px,py);x.quadraticCurveTo(px+rnd()*8-4,py+5,px+rnd()*10-5,py+10+rnd()*6);x.stroke()}
-    else if(sp.t==='berry'){x.beginPath();x.arc(px,py,3.6,0,6.3);x.fill();x.fillStyle='rgba(200,210,255,.25)';x.beginPath();x.arc(px-1,py-1,1.4,0,6.3);x.fill()}
-    else if(sp.t==='chunk2'){x.fillStyle=shade(rnd()<.5?sp.c[0]:sp.c[1],Math.round((rnd()-.6)*70));x.fillRect(px,py,2+rnd()*2.5,2+rnd()*2.5)}
-    else if(sp.t==='seedmix'){var r2=rnd();x.fillStyle=r2<.35?'#e2d0a4':r2<.6?'#1e2230':r2<.8?'#f4f2ee':'#d8c48e';x.beginPath();x.ellipse(px,py,r2<.35?2.4:1.4,r2<.35?1.4:1.4,rnd()*6.3,0,6.3);x.fill()}
-    else {x.beginPath();x.ellipse(px,py,4,1.8,rnd()*6.3,0,6.3);x.fill();x.beginPath();x.arc(px+3,py,2.2,0,6.3);x.fill()}
-  }
-  x.globalAlpha=1;
-  var t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
-}
-function labelTexture(sp){
-  var c=document.createElement('canvas');c.width=512;c.height=256;var x=c.getContext('2d');
-  x.fillStyle='#efe4cc';x.fillRect(0,0,512,256);
-  x.strokeStyle='#2a1c12';x.lineWidth=5;x.strokeRect(14,14,484,228);x.lineWidth=1.5;x.strokeRect(24,24,464,208);
-  x.fillStyle='#8a5a2a';x.font='600 26px Georgia,serif';x.textAlign='center';x.fillText(SPICE_TIERS[sp.tier].toUpperCase(),256,70);
-  var name=sp.name,fs=name.length>14?50:name.length>10?60:70;
-  x.fillStyle='#1d140d';x.font='700 '+fs+'px Georgia,serif';
-  var words=name.split(' ');
-  if(name.length>13&&words.length>1){var half=Math.ceil(words.length/2);x.font='700 54px Georgia,serif';x.fillText(words.slice(0,half).join(' '),256,140);x.fillText(words.slice(half).join(' '),256,196)}
-  else x.fillText(name,256,160);
-  var t=new THREE.CanvasTexture(c);t.anisotropy=4;t.encoding=THREE.sRGBEncoding;return t;
-}
+// Perspective carousel. Jar artwork is rasterized once per spice on first view.
 function initRack3D(){
-  var canvas=$('rackCanvas');
-  if(typeof THREE==='undefined'){loadThree(function(){if($('rackCanvas'))initRack3D()});return}
-  var renderer;
-  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true})}catch(e){canvas.parentNode.style.display='none';return}
-  if(RACK.stop) RACK.stop();
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));
-  renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
-  var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,100);RACK.cam=camera;
-  scene.add(new THREE.HemisphereLight(0xfff0dd,0x20120a,.75));
-  var key=new THREE.DirectionalLight(0xfff4e6,1.6);key.position.set(3,6,7);scene.add(key);
-  var rim=new THREE.DirectionalLight(0xff9a4a,1.4);rim.position.set(-6,3,-4);scene.add(rim);
-  var front=new THREE.PointLight(0xffd9a8,1.2,14,2);front.position.set(0,2,5);scene.add(front);
-  var rack=new THREE.Group();scene.add(rack);
-  var TIER_H=1.32,NT=SPICE_TIERS.length,R0=2.2,top=(NT-1)*TIER_H/2;
-  var wood=new THREE.MeshStandardMaterial({color:0x2e170a,roughness:.55,metalness:.05});
-  var brass=new THREE.MeshStandardMaterial({color:0xc89a4a,roughness:.3,metalness:.85});
-  // center pole + base + crown
-  var pole=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,NT*TIER_H+.6,24),brass);rack.add(pole);
-  var crown=new THREE.Mesh(new THREE.SphereGeometry(.2,24,16),brass);crown.position.y=top+TIER_H*.5+.35;rack.add(crown);
-  var shelfGeo=new THREE.CylinderGeometry(R0+.42,R0+.42,.09,72),railGeo=new THREE.TorusGeometry(R0+.42,.025,8,96);
-  var glassMat=new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.06,metalness:0,transparent:true,opacity:.13,clearcoat:1,clearcoatRoughness:.05,side:THREE.DoubleSide,depthWrite:false});
-  var lidMat=new THREE.MeshStandardMaterial({color:0x17120f,roughness:.35,metalness:.6});
-  var bottleGeo=new THREE.CylinderGeometry(.24,.24,.78,32,1,true),bottomGeo=new THREE.CircleGeometry(.24,32);
-  var neckGeo=new THREE.CylinderGeometry(.17,.24,.1,32,1,true),lidGeo=new THREE.CylinderGeometry(.19,.19,.16,32);
-  var fillGeo=new THREE.CylinderGeometry(.215,.215,.6,32),labelGeo=new THREE.CylinderGeometry(.243,.243,.36,32,1,true,-1.05,2.1);
-  var bottles=[];
-  for(var t=0;t<NT;t++){
-    var y=top-t*TIER_H;
-    var shelf=new THREE.Mesh(shelfGeo,wood);shelf.position.y=y-.47;rack.add(shelf);
-    var rail=new THREE.Mesh(railGeo,brass);rail.rotation.x=Math.PI/2;rail.position.y=y-.3;rack.add(rail);
-    var tierSp=SPICES.filter(function(s){return s.tier===t});
-    // 6 slots per tier, staggered between tiers
-    tierSp.forEach(function(sp,i){
-      var a=(i/tierSp.length)*Math.PI*2+(t%2?Math.PI/tierSp.length:0);
-      var g=new THREE.Group();g.position.set(Math.sin(a)*R0,y,Math.cos(a)*R0);g.rotation.y=a;
-      var fill=new THREE.Mesh(fillGeo,new THREE.MeshStandardMaterial({map:spiceTexture(sp),roughness:.9}));fill.position.y=-.08;g.add(fill);
-      var glass=new THREE.Mesh(bottleGeo,glassMat);g.add(glass);
-      var bot=new THREE.Mesh(bottomGeo,glassMat);bot.rotation.x=Math.PI/2;bot.position.y=-.39;g.add(bot);
-      var neck=new THREE.Mesh(neckGeo,glassMat);neck.position.y=.44;g.add(neck);
-      var lid=new THREE.Mesh(lidGeo,lidMat);lid.position.y=.56;g.add(lid);
-      var lab=new THREE.Mesh(labelGeo,new THREE.MeshStandardMaterial({map:labelTexture(sp),roughness:.8,side:THREE.FrontSide}));lab.position.y=-.02;g.add(lab);
-      g.userData.sp=sp;rack.add(g);
-      bottles.push({g:g,sp:sp,angle:a,base:y,hit:[fill,glass,lab,lid]});
+  var canvas=$('rackCanvas'), ctx=canvas.getContext('2d');
+  var wrap=canvas.parentNode, tiers=$('rackTiers'), hint=$('rackHint');
+  if(!ctx){wrap.hidden=true;return}
+  var motion=matchMedia('(prefers-reduced-motion: reduce)');
+  var gap=1.15, top=(SPICE_TIERS.length-1)*gap/2, radius=1.75;
+  var width=0,height=0,dpr=1,scale=1,zoom=1,center=0,visible=true,raf=0,last=0;
+  var pointers=new Map(), drag=null,pinch=null,hits=[],art=new Map();
+  var rings=SPICE_TIERS.map(function(_,tier){
+    var group=SPICES.filter(function(sp){return sp.tier===tier});
+    return group.map(function(sp,i){
+      return {sp:sp,angle:(i+(tier%2)*.5)*Math.PI*2/group.length};
+    });
+  });
+  RACK.bottles=rings.flat();
+  RACK.rot=RACK.rot||0;
+  RACK.vel=0;RACK.targetRot=null;RACK.focusTier=null;RACK.sel=null;RACK.hl=null;
+  RACK.tY=0;RACK.tD=1;
+  function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+  function focus(i){
+    RACK.focusTier=i;
+    Array.from(tiers.children).forEach(function(button,j){button.setAttribute('aria-pressed',String(i===j))});
+  }
+  RACK.goTier=function(i){
+    focus(i);RACK.tY=i==null?0:top-i*gap;
+    RACK.tD=i==null?1:clamp(width/(scale*4.8),1.55,3.4);
+    wake();
+  };
+  RACK.zoom=function(f){RACK.tD=clamp(RACK.tD/f,.78,4.2);wake()};
+  function round(c,x,y,w,h,r){
+    c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
+  }
+  function gradient(c,x,y,x2,y2,stops){
+    var g=c.createLinearGradient(x,y,x2,y2);
+    stops.forEach(function(s){g.addColorStop(s[0],s[1])});return g;
+  }
+  function jar(sp){
+    if(art.has(sp.id))return art.get(sp.id);
+    var tile=document.createElement('canvas');tile.width=112;tile.height=164;
+    var c=tile.getContext('2d');
+    round(c,10,28,92,132,16);
+    c.fillStyle=gradient(c,10,0,102,0,[[0,'#76675a'],[.12,'#dac9b2'],[.29,'#615345'],[.74,'#4d3c2e'],[.94,'#ac9480'],[1,'#5a4b3c']]);c.fill();
+    round(c,16,42,80,109,12);c.save();c.clip();
+    c.fillStyle=gradient(c,0,41,0,152,[[0,sp.c[1]],[1,sp.c[0]]]);c.fillRect(16,41,80,111);
+    var seed=Array.from(sp.id).reduce(function(n,ch){return n*31+ch.charCodeAt(0)|0},1)>>>0;
+    for(var i=0;i<165;i++){
+      seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+      c.fillStyle=i%3?'#120d0938':'#fff3ce65';
+      c.fillRect(16+(seed%80),42+((seed>>>9)%109),sp.t==='powder'?2:4,i%4+1);
+    }
+    c.fillStyle=gradient(c,16,0,96,0,[[0,'#17100e6b'],[.22,'#ffffff25'],[.45,'#ffffff00'],[1,'#0905048c']]);c.fillRect(16,41,80,111);c.restore();
+    round(c,15,9,82,28,7);
+    c.fillStyle=gradient(c,0,9,0,37,[[0,'#e6ba78'],[.28,'#9e6535'],[.7,'#54351e'],[1,'#c79052']]);c.fill();
+    c.fillStyle='#2a1a1555';
+    for(var groove=21;groove<93;groove+=5)c.fillRect(groove,16,1,15);
+    c.fillStyle='#fff8de64';c.fillRect(19,44,3,93);
+    c.strokeStyle='#fff0c153';c.lineWidth=2;round(c,11,29,90,129,15);c.stroke();
+    art.set(sp.id,tile);return tile;
+  }
+  function label(sp,x,y,w,h){
+    ctx.fillStyle='#f4e5c7';round(ctx,x,y,w,h,Math.min(3,w*.1));ctx.fill();
+    ctx.fillStyle=sp.c[0];ctx.fillRect(x+w*.16,y+h*.13,w*.68,Math.max(1,h*.055));
+    if(w<19)return;
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#241810';
+    var lines=sp.name.split(' ');
+    if(lines.length>2)lines=[lines.slice(0,-1).join(' '),lines.at(-1)];
+    if(sp.name.length<10)lines=[sp.name];
+    ctx.font='bold '+Math.max(5,Math.min(16,w*.17,h*.36))+'px Georgia';
+    lines.forEach(function(line,i){
+      ctx.fillText(line,x+w/2,y+h*.57+(i-(lines.length-1)/2)*h*.28,w*.88);
     });
   }
-  RACK.bottles=bottles;RACK.rot=RACK.rot||0;RACK.targetRot=null;RACK.vel=0;RACK.focusTier=null;RACK.sel=null;RACK.hl=null;
-  // interaction: 1 finger = spin (sideways) + move up/down, 2 fingers = pinch zoom,
-  // mouse wheel = zoom, tap = open a bottle
-  var ptrs={},drag=null,pinch=null,ray=new THREE.Raycaster(),ptr=new THREE.Vector2();
-  var Y_MIN=-top-.3,Y_MAX=top+.3,D_MIN=3.2;
-  function dOut(){var h=NT*TIER_H+1.4,fit=(h/2)/Math.tan(camera.fov*Math.PI/360);var w=(R0+.6)*2.2/2/Math.tan(camera.fov*Math.PI/360)/camera.aspect;return Math.max(fit,w)+R0}
-  RACK.tY=0;RACK.tD=dOut();
-  function setTier(i){RACK.focusTier=i;Array.prototype.forEach.call($('rackTiers').children,function(c,j){c.setAttribute('aria-pressed',i===j?'true':'false')})}
-  RACK.goTier=function(i){if(i==null){RACK.tY=0;RACK.tD=dOut()}else{RACK.tY=top-i*TIER_H;RACK.tD=7.4}setTier(i)};
-  RACK.zoom=function(f){RACK.tD=Math.max(D_MIN,Math.min(dOut()+2,RACK.tD*f));if(RACK.tD>dOut()-.5){RACK.tY+=(0-RACK.tY)*.5}};
+  function project(y,z){
+    var perspective=1/(1-z*.095* Math.min(zoom,2.4));
+    return {y:height*.49-(y-center)*scale*zoom+z*scale*zoom*.16,k:scale*zoom*perspective};
+  }
+  function ellipse(x,y,rx,ry,color){
+    ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+  }
+  function paint(){
+    ctx.clearRect(0,0,width,height);hits=[];
+    var cx=width/2, unit=scale*zoom;
+    var upper=project(top+.63,0).y, lower=project(-top-.58,0).y;
+    ellipse(cx,lower+unit*.07,unit*1.85,unit*.25,'#0006');
+    ctx.fillStyle=gradient(ctx,cx-unit*.095,0,cx+unit*.095,0,[[0,'#41271b'],[.44,'#d6a767'],[.61,'#895632'],[1,'#362018']]);
+    ctx.fillRect(cx-unit*.095,upper,unit*.19,lower-upper);
+    ellipse(cx,upper,unit*.19,unit*.1,'#d5a269');
+    for(var tier=rings.length-1;tier>=0;tier--){
+      var y=top-tier*gap, shelf=project(y-.45,0).y;
+      var rw=unit*2.06,rh=unit*.33;
+      if(shelf<-rh||shelf-unit*1.5>height)continue;
+      ellipse(cx,shelf+unit*.12,rw,rh,'#2f1a11');
+      ellipse(cx,shelf+unit*.065,rw,rh,'#bd8855');
+      ellipse(cx,shelf,rw,rh,gradient(ctx,0,shelf-rh,0,shelf+rh,[[0,'#8a5838'],[.45,'#634029'],[1,'#382318']]));
+      ctx.beginPath();ctx.ellipse(cx,shelf,rw*.96,rh*.83,0,0,Math.PI*2);
+      ctx.strokeStyle='#d49b5b55';ctx.lineWidth=1;ctx.stroke();
+      var items=rings[tier].map(function(b){
+        var a=b.angle+RACK.rot;
+        return {b:b,x:Math.sin(a)*radius,z:Math.cos(a)*radius};
+      }).sort(function(a,b){return a.z-b.z});
+      items.forEach(function(item){
+        var sp=item.b.sp,p=project(y-.45,item.z),x=cx+item.x*p.k;
+        var selected=RACK.sel===sp.id||RACK.hl===sp.id;
+        var w=p.k*(selected?.57:.48),h=w*164/112,foot=p.y-(selected?p.k*.12:0);
+        if(x+w<0||x-w>width||foot<0||foot-h>height)return;
+        var left=x-w/2,topY=foot-h;
+        ellipse(x,p.y,w*.46,h*.085,'#160e0b75');
+        ctx.globalAlpha=item.z<-.18?.67:1;
+        ctx.drawImage(jar(sp),left,topY,w,h);
+        if(item.z>-.15)label(sp,left+w*.115,topY+h*.46,w*.77,h*.33);
+        ctx.globalAlpha=1;
+        if(selected){
+          ctx.strokeStyle='#ffcb7d';ctx.lineWidth=1.3;
+          round(ctx,left-2,topY+2,w+4,h,Math.min(7,w*.24));ctx.stroke();
+        }
+        hits.push({id:sp.id,x:left,y:topY,w:w,h:h});
+      });
+    }
+  }
+  function size(){
+    var box=canvas.getBoundingClientRect();
+    if(!box.width||!box.height)return;
+    width=box.width;height=box.height;dpr=Math.min(window.devicePixelRatio||1,1.5);
+    canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    scale=Math.min((height-78)/(SPICE_TIERS.length*gap+.4),(width-40)/4.5);
+    wake();
+  }
+  function running(){
+    return visible&&!document.hidden&&canvas.isConnected&&$('screenTool').style.display!=='none';
+  }
+  function wake(){
+    if(!raf&&running()){last=0;raf=requestAnimationFrame(frame)}
+  }
+  RACK.wake=wake;
+  function frame(now){
+    raf=0;if(!running()||!width)return;
+    var dt=last?Math.min((now-last)/1000,.04):1/60;last=now;
+    var smooth=motion.matches?1:1-Math.exp(-dt*9);
+    if(RACK.targetRot!=null){
+      RACK.rot+=(RACK.targetRot-RACK.rot)*smooth;
+      if(Math.abs(RACK.targetRot-RACK.rot)<.002){RACK.rot=RACK.targetRot;RACK.targetRot=null}
+    }else if(!drag&&!pinch&&!motion.matches){
+      RACK.rot+=Math.abs(RACK.vel)>.025?RACK.vel*dt:RACK.sel==null?.13*dt:0;
+      RACK.vel*=Math.exp(-dt*4);
+    }
+    center+=(RACK.tY-center)*smooth;zoom+=(RACK.tD-zoom)*smooth;
+    paint();
+    if(!motion.matches)raf=requestAnimationFrame(frame);
+  }
   canvas.addEventListener('pointerdown',function(e){
-    ptrs[e.pointerId]={x:e.clientX,y:e.clientY};try{canvas.setPointerCapture(e.pointerId)}catch(_){}
-    var ids=Object.keys(ptrs);
-    if(ids.length===2){var p1=ptrs[ids[0]],p2=ptrs[ids[1]];pinch={d:Math.hypot(p1.x-p2.x,p1.y-p2.y),D:RACK.tD};drag=null;return}
-    drag={x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,moved:0};RACK.targetRot=null;
+    if(e.button!==0&&e.pointerType==='mouse')return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+    RACK.targetRot=null;RACK.vel=0;
+    if(pointers.size===2){
+      var points=Array.from(pointers.values());
+      pinch={distance:Math.max(20,Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)),zoom:RACK.tD};
+      drag=null;return;
+    }
+    if(pointers.size===1)drag={moved:0,last:performance.now()};
   });
   canvas.addEventListener('pointermove',function(e){
-    if(!ptrs[e.pointerId]) return;
-    ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
-    if(pinch){var ids=Object.keys(ptrs);if(ids.length<2)return;var p1=ptrs[ids[0]],p2=ptrs[ids[1]];var d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
-      RACK.tD=Math.max(D_MIN,Math.min(dOut()+2,pinch.D*pinch.d/Math.max(20,d)));setTier(null);return}
-    if(!drag) return;
-    var dx=e.clientX-drag.lx,dy=e.clientY-drag.ly;drag.lx=e.clientX;drag.ly=e.clientY;drag.moved+=Math.abs(dx)+Math.abs(dy);
-    RACK.rot+=dx*.0085;RACK.vel=dx*.0085;
-    // move up/down the rack; faster when zoomed out
-    RACK.tY=Math.max(Y_MIN,Math.min(Y_MAX,RACK.tY+dy*.0035*(RACK.tD/6)));
-    if(Math.abs(dy)>2) setTier(null);
-    $('rackHint').style.opacity=0;
-  });
-  function up(e){
-    if(drag&&!pinch&&drag.moved<8){
-      var r=canvas.getBoundingClientRect();ptr.x=((e.clientX-r.left)/r.width)*2-1;ptr.y=-((e.clientY-r.top)/r.height)*2+1;
-      ray.setFromCamera(ptr,camera);
-      var objs=[];bottles.forEach(function(b){b.hit.forEach(function(m){m.userData.b=b;objs.push(m)})});
-      var hits=ray.intersectObjects(objs,false);
-      if(hits.length){var bb=hits[0].object.userData.b;rackSpinTo(bb.sp.id);openSpice(bb.sp.id,false)}
+    var before=pointers.get(e.pointerId);if(!before)return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch&&pointers.size>=2){
+      var points=Array.from(pointers.values());
+      RACK.tD=clamp(pinch.zoom*Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)/pinch.distance,.78,4.2);
+      focus(null);wake();return;
     }
-    delete ptrs[e.pointerId];
-    if(Object.keys(ptrs).length<2) pinch=null;
-    if(!Object.keys(ptrs).length) drag=null;
+    if(!drag)return;
+    var dx=e.clientX-before.x,dy=e.clientY-before.y,now=performance.now();
+    drag.moved+=Math.abs(dx)+Math.abs(dy);
+    RACK.rot+=dx*.009;RACK.vel=clamp(dx*9/Math.max(10,now-drag.last),-8,8);drag.last=now;
+    RACK.tY=clamp(RACK.tY+dy/(scale*zoom),-top-.4,top+.4);
+    if(Math.abs(dy)>2)focus(null);
+    hint.style.opacity=0;wake();
+  });
+  function end(e){
+    if(!pointers.has(e.pointerId))return;
+    if(e.type==='pointerup'&&drag&&drag.moved<8&&!pinch){
+      var box=canvas.getBoundingClientRect(),x=e.clientX-box.left,y=e.clientY-box.top;
+      for(var i=hits.length-1;i>=0;i--){
+        var h=hits[i];
+        if(x<h.x||x>h.x+h.w||y<h.y||y>h.y+h.h)continue;
+        openSpice(h.id,true);break;
+      }
+    }
+    pointers.delete(e.pointerId);
+    if(pointers.size<2)pinch=null;
+    drag=null;wake();
   }
-  canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
-  canvas.addEventListener('wheel',function(e){e.preventDefault();RACK.zoom(e.deltaY>0?1.12:1/1.12);setTier(null)},{passive:false});
-  canvas.style.touchAction='none';
-  function size(){var w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
-  window.addEventListener('resize',size);
-  var alive=true,clock=new THREE.Clock(),camY=0,camD=RACK.tD;
-  RACK.stop=function(){alive=false;window.removeEventListener('resize',size);renderer.dispose()};
-  function frame(){
-    if(!alive) return;
-    requestAnimationFrame(frame);
-    if(!document.body.contains(canvas)){RACK.stop();return}
-    if($('screenTool').style.display==='none'||document.hidden){clock.getDelta();return}
-    if(canvas.width!==Math.round(canvas.clientWidth*renderer.getPixelRatio())) size();
-    var dt=Math.min(clock.getDelta(),.05),tm=clock.elapsedTime;
-    if(RACK.targetRot!=null){RACK.rot+=(RACK.targetRot-RACK.rot)*Math.min(1,dt*6);if(Math.abs(RACK.targetRot-RACK.rot)<.002)RACK.targetRot=null}
-    else if(!drag){RACK.vel*=.93;RACK.rot+=RACK.vel;if(Math.abs(RACK.vel)<.0004&&RACK.sel==null)RACK.rot+=dt*.12}
-    rack.rotation.y=RACK.rot;
-    // camera: whole rack, or zoom on one tier
-    camY+=(RACK.tY-camY)*Math.min(1,dt*6);camD+=(RACK.tD-camD)*Math.min(1,dt*6);
-    var lift=.4+camD*.09;
-    camera.position.set(0,camY+lift,camD);camera.lookAt(0,camY-.1,0);
-    bottles.forEach(function(b){
-      var on=b.sp.id===RACK.sel||b.sp.id===RACK.hl;
-      var ly=on?.22:0;b.g.position.y+=(b.base+ly+(on?Math.sin(tm*3)*.03:0)-b.g.position.y)*Math.min(1,dt*8);
-      var s=on?1.12:1;b.g.scale.x+=(s-b.g.scale.x)*.15;b.g.scale.y=b.g.scale.z=b.g.scale.x;
-    });
-    renderer.render(scene,camera);
-  }
-  size();frame();
+  canvas.addEventListener('pointerup',end);
+  canvas.addEventListener('pointercancel',end);
+  canvas.addEventListener('lostpointercapture',end);
+  canvas.addEventListener('wheel',function(e){
+    e.preventDefault();RACK.zoom(e.deltaY>0?1.12:1/1.12);focus(null);
+  },{passive:false});
+  canvas.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+      e.preventDefault();RACK.targetRot=null;RACK.rot+=e.key==='ArrowRight'?.35:-.35;wake();
+    }
+  });
+  function suspend(){cancelAnimationFrame(raf);raf=0}
+  function visibility(){if(running())wake();else suspend()}
+  var observer=new IntersectionObserver(function(entries){visible=entries[0].isIntersecting;visibility()});
+  observer.observe(canvas);
+  var resize=new ResizeObserver(size);resize.observe(canvas);
+  window.addEventListener('hashchange',route);
+  document.addEventListener('visibilitychange',visibility);
+  motion.addEventListener('change',wake);
+  function route(){if(location.hash.indexOf('#/tool/rack')!==0)RACK.stop();else visibility()}
+  RACK.stop=function(){
+    suspend();observer.disconnect();resize.disconnect();art.clear();
+    window.removeEventListener('hashchange',route);
+    document.removeEventListener('visibilitychange',visibility);
+    motion.removeEventListener('change',wake);
+    RACK.bottles=null;RACK.stop=null;RACK.wake=null;
+    RACK.goTier=null;RACK.zoom=null;
+  };
+  size();
 }
-function rackScreenPos(id){var b=RACK.bottles.filter(function(x){return x.sp.id===id})[0];var v=new THREE.Vector3();b.g.getWorldPosition(v);v.project(RACK.cam);var r=$('rackCanvas').getBoundingClientRect();return [r.left+(v.x+1)/2*r.width,r.top+(1-v.y)/2*r.height]}
 
 var PIZZA={id:'pizza',min:1,max:12};
 var PSTYLES={
@@ -4857,7 +4939,7 @@ function galleryFor(cat,first){
 })();
 
 // load the 3D library after the page is up (hero + spice rack share it)
-var _threeQ=[];function loadThree(cb){if(window.THREE){cb();return}_threeQ.push(cb);if(_threeQ.length>1)return;var sc=document.createElement('script');sc.src='vendor/three.min.js';sc.async=true;sc.onload=function(){var q=_threeQ;_threeQ=[];q.forEach(function(f){try{f()}catch(e){}})};sc.onerror=function(){_threeQ=[]};document.head.appendChild(sc)}
+var _threeQ;function loadThree(cb){if(window.THREE){cb();return}_threeQ=_threeQ||[];_threeQ.push(cb);if(_threeQ.length>1)return;var sc=document.createElement('script');sc.src='vendor/three.min.js';sc.async=true;sc.onload=function(){var q=_threeQ;_threeQ=[];q.forEach(function(f){try{f()}catch(e){}})};sc.onerror=function(){_threeQ=[]};document.head.appendChild(sc)}
 function startHero(){
 // ==== 3D hero: cast-iron skillet, beef stir-fry, steam, floating spices ====
 (function(){
