@@ -292,6 +292,8 @@ img{max-width:100%}
 .cgchev{color:#FFC56B;transition:transform .25s}.cgroup.open .cgchev{transform:rotate(180deg)}
 .cgroup>.cardgrid{display:none;padding:4px 12px 14px}.cgroup.open>.cardgrid{display:grid}
 
+.cattile .ph{transition:transform 1.2s var(--ease),opacity 1.4s ease}.cattile .ph2{opacity:0}
+
 </style>
 <style>#scene{opacity:0;transition:opacity .8s ease}#scene.ready{opacity:1}</style>
 </head>
@@ -4288,6 +4290,7 @@ function SEARCH2(){
 })();
 
 var FOOD_IMGS={};
+var BIG_IMGS={"img/dish/chickenpotpie-1.jpg": 1, "img/dish/buns-1.jpg": 1, "img/dish/nypizza-1.jpg": 1, "img/dish/shakshuka-1.jpg": 1, "img/dish/spagbolognese-1.jpg": 1, "img/dish/stuffedparm-1.jpg": 1, "img/dish/robertasdough-1.jpg": 1, "img/dish/biscuitsgravy-1.jpg": 1, "img/dish/wwsandwich-1.jpg": 1, "img/dish/redrice-1.jpg": 1, "img/dish/beefenchiladas-1.jpg": 1, "img/dish/empanadas-1.jpg": 1, "img/dish/teriyakibeef-1.jpg": 1, "img/dish/bluebiscuit-1.jpg": 1, "img/dish/dumplings-1.jpg": 1, "img/dish/cherrypie-1.jpg": 1, "img/dish/focaccia-1.jpg": 1, "img/dish/orangebeef-1.jpg": 1, "img/dish/orangechicken-1.jpg": 1, "img/dish/eggrollbowl-1.jpg": 1, "img/dish/rollups-1.jpg": 1, "img/dish/burgers-2.jpg": 1, "img/dish/madeira-1.jpg": 1, "img/dish/burgers-1.jpg": 1, "img/dish/applepie-1.jpg": 1, "img/dish/fajitasheet-1.jpg": 1, "img/dish/quesoblanco-1.jpg": 1, "img/dish/kungpaobeef-1.jpg": 1, "img/dish/parmchicken-1.jpg": 1, "img/dish/chickpeasalad-1.jpg": 1, "img/dish/churrotoast-1.jpg": 1, "img/dish/steakfajitas-1.jpg": 1, "img/dish/biscuits-1.jpg": 1, "img/dish/lobsterrolls-1.jpg": 1, "img/dish/chickenfajitas-1.jpg": 1, "img/dish/cfribeye-1.jpg": 1, "img/dish/bagels-1.jpg": 1, "img/dish/koreanbeefrice-1.jpg": 1, "img/dish/rolls-1.jpg": 1, "img/dish/noknead-1.jpg": 1, "img/dish/skinnykorean-1.jpg": 1, "img/dish/biancodough-1.jpg": 1, "img/dish/sesamechicken-1.jpg": 1, "img/dish/risotto-1.jpg": 1, "img/dish/carbonara-1.jpg": 1, "img/dish/cfsteak-1.jpg": 1, "img/dish/beefbroccoli-1.jpg": 1, "img/dish/lettucewraps-1.jpg": 1, "img/dish/keylime-1.jpg": 1, "img/dish/wellington-1.jpg": 1, "img/dish/meatloaf-1.jpg": 1, "img/dish/friedrice-1.jpg": 1, "img/dish/mongolian-1.jpg": 1, "img/dish/adobochicken-1.jpg": 1, "img/dish/phillycheesesteak-1.jpg": 1, "img/dish/muffins-1.jpg": 1, "img/dish/eggnoodles-1.jpg": 1, "img/dish/hunanbeef-1.jpg": 1, "img/dish/generaltso-1.jpg": 1, "img/dish/gemignanidough-1.jpg": 1, "img/dish/pita-1.jpg": 1, "img/dish/carneasada-1.jpg": 1, "img/dish/cajunsteakpasta-1.jpg": 1, "img/dish/sausagemeatloaf-1.jpg": 1, "img/dish/eggpasta-1.jpg": 1, "img/dish/alicesprings-1.jpg": 1, "img/dish/bmpancakes-1.jpg": 1, "img/dish/pbj-1.jpg": 1, "img/dish/burgerblends-1.jpg": 1, "img/dish/halfsour-1.jpg": 1, "img/dish/teriyakichicken-1.jpg": 1, "img/dish/lomein-1.jpg": 1, "img/dish/ccookies-1.jpg": 1, "img/dish/freezerburritos-1.jpg": 1, "img/dish/oatmealraisin-1.jpg": 1, "img/dish/classicpancakes-1.jpg": 1, "img/dish/cornbread-1.jpg": 1, "img/dish/steakhummus-1.jpg": 1, "img/dish/challah-1.jpg": 1, "img/dish/grainbowls-1.jpg": 1, "img/dish/belgian-1.jpg": 1, "img/dish/lemonmeringue-1.jpg": 1, "img/dish/gfbread-1.jpg": 1, "img/dish/chickenquinoa-1.jpg": 1, "img/dish/chipotlebowl-1.jpg": 1, "img/dish/kungpaochicken-1.jpg": 1, "img/dish/pandaorange-1.jpg": 1, "img/dish/paula-1.jpg": 1, "img/dish/stroganoff-1.jpg": 1, "img/dish/beefcasserole-1.jpg": 1, "img/dish/gfbiscuits-1.jpg": 1, "img/dish/pbcookies-1.jpg": 1, "img/dish/sesamenoodle-1.jpg": 1, "img/dish/lasagna-1.jpg": 1, "img/dish/snickerdoodles-1.jpg": 1, "img/dish/quesadillas-1.jpg": 1, "img/dish/mushroomsteakpasta-1.jpg": 1, "img/dish/steakgorgonzola-1.jpg": 1, "img/dish/eggpockets-1.jpg": 1, "img/dish/chipotlesteak-1.jpg": 1, "img/dish/corntortilla-1.jpg": 1, "img/dish/wwsdsandwich-1.jpg": 1, "img/dish/ogsgorgonzola-1.jpg": 1, "img/dish/salmonsheet-1.jpg": 1, "img/dish/smashburgers-1.jpg": 1, "img/dish/pizzalunch-1.jpg": 1, "img/dish/sheetpanbreakfast-1.jpg": 1, "img/dish/tatertots-1.jpg": 1, "img/dish/baconpizza-1.jpg": 1, "img/dish/mallteriyaki-1.jpg": 1, "img/dish/bmwaffles-1.jpg": 1, "img/dish/brioche-1.jpg": 1, "img/dish/pfmongolian-1.jpg": 1, "img/dish/pecanpie-1.jpg": 1, "img/dish/salisburyprep-1.jpg": 1, "img/dish/louisiana-1.jpg": 1, "img/dish/chickenenchiladas-1.jpg": 1, "img/dish/sesamebeef-1.jpg": 1, "img/dish/avocadoegg-1.jpg": 1, "img/dish/burritobowls-1.jpg": 1, "img/dish/steakalfredo-1.jpg": 1, "img/dish/sausageveg-1.jpg": 1, "img/dish/lucalidough-1.jpg": 1, "img/dish/wwsourdough-1.jpg": 1, "img/dish/salisbury-1.jpg": 1, "img/dish/sloppyjoes-1.jpg": 1, "img/dish/burgerblends-2.jpg": 1, "img/dish/taquitos-1.jpg": 1};
 var SCROLL_POS={};
 function findItemById(id){
   var it=allSearchItems().filter(function(x){return x.id===id})[0];
@@ -4785,6 +4788,7 @@ function renderHome(){
     t.innerHTML=(img?'<div class="ph" style="background-image:url(\''+img+'\')"></div>':'<div class="ph gen '+(catGen(cat.key)||'gen1')+'"><div class="genicon">'+iconSvg(cat.icon,90)+'</div></div>')+
       '<div class="shine"></div><div class="ic">'+iconSvg(cat.icon,18)+'</div><div class="tx"><div class="tt">'+cat.label+'</div><div class="tn">'+n+' recipes</div></div>';
     t.addEventListener('click',function(){openCategory(cat)});
+    if(img){t._gal=galleryFor(cat,img);t.insertAdjacentHTML('afterbegin','<div class="ph ph2"></div>')}
     tilt(t);reveal(t,Math.min(i,4)*.06);grid.appendChild(t);
   });
   $('filterSection').style.display=hasF?'block':'none';
@@ -4822,6 +4826,35 @@ function DU(u){return (u&&window.DISH_DATA&&DISH_DATA[u])||u}
 function fixSmallImgs(){if(!window.DISH_DATA)return;
   R.forEach(function(r){if(r.img)r.img=DU(r.img)});
   if(typeof ITEM_IMG!=='undefined')for(var k in ITEM_IMG)ITEM_IMG[k].img=DU(ITEM_IMG[k].img);}
+
+// ---- home tiles: rotating photo gallery ----
+function galleryFor(cat,first){
+  var seen={},big=[],all=[];seen[first]=1;
+  itemsForCat(cat).forEach(function(it){var u=imgFor(it.id);if(!u||seen[u])return;seen[u]=1;all.push(u);
+    var raw=imgFor0(it.id);if(window.BIG_IMGS&&BIG_IMGS[raw])big.push(u)});
+  var pool=big.length>=3?big:all;
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=pool[i];pool[i]=pool[j];pool[j]=x}
+  return [first].concat(pool.slice(0,11));
+}
+(function(){
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var turn=0;
+  setInterval(function(){
+    var home=document.getElementById('screenHome');
+    if(document.hidden||!home||home.style.display==='none')return;
+    var tiles=Array.prototype.filter.call(document.querySelectorAll('.cattile'),function(t){
+      if(!t._gal||t._gal.length<2)return false;var r=t.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight});
+    if(!tiles.length)return;
+    var t=tiles[turn++%tiles.length];
+    t._gi=((t._gi||0)+1)%t._gal.length;var url=t._gal[t._gi];
+    var im=new Image();im.onload=function(){
+      var a=t.querySelector('.ph:not(.ph2)'),b=t.querySelector('.ph2');
+      var show=t._top==='b'?a:b,hide=t._top==='b'?b:a;
+      show.style.backgroundImage="url('"+url+"')";show.style.opacity=1;hide.style.opacity=0;
+      t._top=t._top==='b'?'a':'b';
+    };im.src=url;
+  },2600);
+})();
 
 // load the 3D library after the page is up (hero + spice rack share it)
 var _threeQ=[];function loadThree(cb){if(window.THREE){cb();return}_threeQ.push(cb);if(_threeQ.length>1)return;var sc=document.createElement('script');sc.src='vendor/three.min.js';sc.async=true;sc.onload=function(){var q=_threeQ;_threeQ=[];q.forEach(function(f){try{f()}catch(e){}})};sc.onerror=function(){_threeQ=[]};document.head.appendChild(sc)}
