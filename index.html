@@ -9,9 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Recipe Bench</title>
 <link rel="stylesheet" href="vendor/fonts/fonts.css">
-<meta name="description" content="Your personal recipe workbench. Find a favorite, scale the batch, and bring something good to the table.">
-<link rel="preload" href="img/hero/skillet.webp" as="image">
-<meta name="theme-color" content="#14110E">
+<meta name="theme-color" content="#0B0907">
 
 <style>
 :root{--bg:#0B0907;--bg2:#15100C;--ink:#F6EDE1;--muted:#A8998A;--line:rgba(255,236,214,.09);--card:rgba(255,240,222,.045);--card2:rgba(255,240,222,.08);
@@ -295,155 +293,23 @@ img{max-width:100%}
 .cgroup>.cardgrid{display:none;padding:4px 12px 14px}.cgroup.open>.cardgrid{display:grid}
 
 </style>
-<style>
-/* Ember Skillet — home treatment. Existing recipe/tool screens remain intact. */
-:root{--accent:#E8AD55;--accent2:#F2C778;--muted:#B9AC9C;--glow:0 0 0 1px rgba(232,173,85,.35),0 8px 30px -14px rgba(232,173,85,.35)}
-body{background:#14110E;color:#F5EBDD}
-body::before{opacity:.025}
-.hero3d{height:auto;min-height:0;overflow:visible;margin:0;padding:0 20px 16px;isolation:isolate}
-.hero3d::after{display:none}
-.herotop{position:relative;padding:22px 0 20px;gap:12px}
-.brandmark{font:500 25px/1.1 Fraunces,Georgia,serif;letter-spacing:-.7px;text-transform:none;color:var(--ink);gap:9px}
-.brandmark i{display:none}
-.brandmark img{width:36px;height:36px;object-fit:contain}
-.herotop .iconbtn{width:40px;height:40px;border-radius:50%;background:transparent}
-.ember-intro{text-align:center;position:relative;z-index:2;padding-top:8px;pointer-events:none}
-.herotitle{font:500 clamp(41px,11.5vw,60px)/1.04 Fraunces,Georgia,serif;letter-spacing:-1.8px;margin:0;opacity:1;animation:none}
-.herotitle span{display:block}
-.herotitle span:last-child{font-style:normal;background:none;color:var(--ink);-webkit-text-fill-color:var(--ink)}
-.ember-intro .eyebrow{font:600 10px/1.3 Inter,system-ui,sans-serif;letter-spacing:.17em;color:var(--accent2);margin:0 0 10px;opacity:1;animation:none}
-.ember-stage{position:relative;width:calc(100% + 40px);margin:0 -20px;aspect-ratio:1.12;min-height:250px;perspective:850px;isolation:isolate;overflow:hidden}
-.skillet-control{position:absolute;inset:0;background:none;border:0;padding:0;color:inherit;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline-offset:-6px;border-radius:24px}
-.skillet-control:active{cursor:grabbing}
-.skillet-control:focus-visible{outline:2px solid var(--accent2)}
-.skillet-art{position:absolute;left:1%;top:-5%;width:98%;height:112%;object-fit:contain;filter:drop-shadow(0 17px 18px rgba(0,0,0,.32));pointer-events:none;transform-origin:52% 67%;will-change:transform}
-.toss-art{position:absolute;left:19%;top:13%;width:33%;height:36%;object-fit:contain;pointer-events:none;opacity:0;will-change:transform,opacity}
-#scene{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
-.ember-actions{display:flex;align-items:center;justify-content:center;gap:16px;margin:-2px 0 16px;position:relative;z-index:3}
-.toss-button,.motion-button{min-height:44px;cursor:pointer;font:500 12px/1.3 Inter,system-ui,sans-serif;color:var(--accent2);border:0;background:transparent;padding:8px 6px;display:inline-flex;align-items:center;gap:7px}
-.toss-button svg,.motion-button svg{width:17px;height:17px}
-.motion-button{color:var(--muted);border-left:1px solid var(--line);padding-left:16px}
-.herocopy{position:relative;inset:auto;padding:0;z-index:4}
-.herosub{display:none}
-.searchbar{border:1px solid #5F5448;border-radius:100px;background:#2E2923;padding:15px 17px;opacity:1;animation:none;backdrop-filter:none;box-shadow:none}
-.searchbar input{font-size:15px;font-weight:400}
-.searchbar input::placeholder{color:#D2C5B5}
-.searchmode{margin:10px 0 0;justify-content:center;gap:6px}
-.searchmode button{font-size:11px;min-height:35px;padding:7px 13px;background:none;border-color:transparent;color:#B9AC9C}
-.searchmode button[aria-pressed="true"]{background:#2D261C;border-color:#685337;color:#F2C778}
-.scrollcue{display:none}
-.homebody{padding:0 20px}
-.statrow{display:none}
-.ember-featured{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 0}
-.ember-feature{display:flex;flex-direction:column;text-align:left;padding:0;border:1px solid #41372E;border-radius:17px;overflow:hidden;background:#241F19;color:var(--ink);cursor:pointer;transition:transform .2s,border-color .2s}
-.ember-feature:active{transform:scale(.98)}
-.ember-feature:hover{border-color:#9B794D}
-.ember-feature img{display:block;width:100%;aspect-ratio:1.34;object-fit:cover}
-.ember-feature strong{font:400 18px/1.15 Fraunces,Georgia,serif;display:block;padding:12px 12px 4px}
-.ember-feature small{font:400 11px/1.3 Inter,system-ui,sans-serif;padding:0 12px 13px;color:var(--muted)}
-.ember-section-title{font:400 23px/1.2 Fraunces,Georgia,serif;margin:22px 0 12px;letter-spacing:-.3px}
-.ember-home .bottomnav{bottom:0;width:100%;max-width:600px;border-radius:0;background:rgba(20,17,14,.96);border:0;border-top:1px solid #3B332A;padding:9px 15px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:none;backdrop-filter:blur(18px)}
-.ember-home .bottomnav button{font:500 10px/1.2 Inter,system-ui,sans-serif;letter-spacing:0;text-transform:none;gap:5px;border-radius:12px;padding:8px 0}
-.ember-home .bottomnav button svg{width:22px;height:22px}
-.ember-home .bottomnav button[aria-current="true"]{background:transparent;color:var(--accent2)}
-.ember-home #continueRow .sectionlabel{margin-top:26px}
-.ember-home .cattile{border-radius:17px;aspect-ratio:1.2}
-.ember-home .cattile:first-child{grid-column:auto;aspect-ratio:1.2}
-.ember-home .cattile:first-child .tt{font-size:22px}
-.ember-home .cattile .tt{font-size:22px}
-.ember-home .cattile .ic{display:none}
-.ember-home .cattile .ph{transition:transform .4s}
-.ember-home .tooltile .ti{box-shadow:none;background:#E8AD55}
-.ember-home .tooltile::before{display:none}
-.ember-home .sectionlabel{letter-spacing:.12em}
-.ember-home .sechead{font-size:28px}
-.ember-home.search-active .ember-intro,.ember-home.search-active .ember-stage,.ember-home.search-active .ember-actions{display:none}
-.ember-home.search-active .hero3d{position:sticky;top:0;z-index:25;background:#14110E;padding-bottom:13px}
-.ember-home.search-active .herotop{padding:16px 0}
-.ember-home.search-active .ember-featured,.ember-home.search-active .ember-section-title{display:none}
-.ember-home.search-active #searchResults{margin-top:12px!important}
-@media(min-width:650px){
- .hero3d{padding-left:32px;padding-right:32px}
- .herotop{padding-top:26px;padding-bottom:18px}
- .ember-stage{width:100%;margin:0;aspect-ratio:1.5;min-height:0}
- .skillet-art{left:5%;top:0;width:90%;height:100%}
- .toss-art{left:26%;top:4%;width:26%;height:40%}
- .herotitle{font-size:64px}
- .ember-intro{padding-top:12px}
- .herotitle span{display:inline}
- .herotitle span+span::before{content:' '}
- .ember-actions{margin-top:-5px}
- .herocopy{max-width:580px;margin:0 auto}
- .homebody{padding:0 32px}
- .ember-featured{gap:20px;max-width:680px;margin:12px auto 0}
- .ember-feature img{aspect-ratio:1.65}
- .ember-feature strong{font-size:23px}
- .ember-feature small{font-size:12px}
- .ember-section-title{max-width:680px;margin-left:auto;margin-right:auto}
- .ember-home .bottomnav{max-width:480px;bottom:16px;border:1px solid #453B2E;border-radius:22px;padding:7px}
-}
-@media(max-width:350px){.brandmark{font-size:22px}.brandmark img{width:30px;height:30px}.herotitle{font-size:39px}.ember-stage{aspect-ratio:1.1}.ember-actions{gap:8px}.toss-button,.motion-button{font-size:11px}.ember-feature strong{font-size:16px}}
-@media(prefers-reduced-motion:reduce){.skillet-art,.toss-art{will-change:auto}.ember-feature,.screen,.navrow{animation:none!important;transition:none!important}}
-@media(max-width:649px){
- .herotop{padding:16px 0 12px}
- .ember-intro{padding-top:0}
- .ember-intro .eyebrow{display:none}
- .herotitle{font-size:46px;line-height:1.02}
- .ember-stage{aspect-ratio:1.3;overflow:visible}
- .skillet-art{top:-14%;height:120%}
- .toss-art{top:5%}
- .ember-actions{margin:-6px 0 8px}
- .ember-section-title{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
- .ember-featured{margin-top:10px}
-}
-@media(max-width:649px){
- html{scrollbar-width:none}
- html::-webkit-scrollbar{display:none}
- .herotop{padding-top:12px;padding-bottom:10px}
- .herotitle{font-size:44px}
- .ember-stage{aspect-ratio:1.44}
- .skillet-art{top:-19%;height:125%}
- .searchmode{margin-top:6px}
- .searchmode button{min-height:28px;padding-top:4px;padding-bottom:4px}
-}
-.ember-feature img{height:auto}
-
-/* desktop: keep search + toggle above the floating menu bar */
-@media(min-width:650px){
- .ember-stage{aspect-ratio:auto;height:clamp(240px,calc(100svh - 470px),560px)}
- .ember-home .homebody{padding-bottom:110px}
-}
-
-</style>
+<style>#scene{opacity:0;transition:opacity .8s ease}#scene.ready{opacity:1}</style>
 </head>
 <body>
 <main>
 
 <div id="screenHome" class="screen">
 <section class="hero3d" aria-label="The Recipe Bench">
-
-<div class="herotop"><div class="brandmark"><img src="img/hero/brand.webp" alt="" width="36" height="36">Recipe Bench</div><span class="count-badge" id="totalCount"></span><button class="iconbtn" id="themeToggle" aria-label="Toggle dark mode" type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" id="themeIcon"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.3M12 19.2v2.3M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.4 19.6l1.6-1.6M18 6l1.6-1.6"/></svg></button><button class="iconbtn" id="cartBtnHome" aria-label="Shopping list" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="20" r="1.4" fill="currentColor" stroke="none"/><circle cx="18" cy="20" r="1.4" fill="currentColor" stroke="none"/><path d="M2.5 3h2.2l2 12.2a2 2 0 0 0 2 1.7h8.7a2 2 0 0 0 2-1.6L21 8H6"/></svg><span class="badge-dot" id="cartDotHome" style="display:none"></span></button></div>
-<div class="ember-intro">
-<div class="eyebrow">A LITTLE INSPIRATION. A LOT OF FLAVOR.</div>
-<h1 class="herotitle"><span>Good food.</span><span>Your way.</span></h1>
-</div>
-<div class="ember-stage" id="emberStage">
-<button id="skilletControl" class="skillet-control" type="button" aria-label="Toss the stir-fry. Drag horizontally to tilt the skillet.">
-<img class="skillet-art" id="skilletArt" src="img/hero/skillet.webp" width="960" height="960" alt="Cast-iron skillet filled with beef, broccoli, peppers and snap peas" fetchpriority="high" draggable="false">
-<img class="toss-art" id="tossArt" src="img/hero/toss.webp" width="900" height="822" alt="" draggable="false">
-</button>
 <canvas id="scene" aria-hidden="true"></canvas>
-</div>
-<div class="ember-actions">
-<button class="toss-button" type="button" id="tossBtn">Drag to tilt · Tap to toss</button>
-<button class="motion-button" type="button" id="motionBtn" aria-pressed="false"><span id="motionText">Pause motion</span></button>
-</div>
+<div class="herotop"><div class="brandmark"><i></i>The Recipe Bench</div><span class="count-badge" id="totalCount"></span><button class="iconbtn" id="themeToggle" aria-label="Toggle dark mode" type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" id="themeIcon"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.3M12 19.2v2.3M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.4 19.6l1.6-1.6M18 6l1.6-1.6"/></svg></button><button class="iconbtn" id="cartBtnHome" aria-label="Shopping list" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="20" r="1.4" fill="currentColor" stroke="none"/><circle cx="18" cy="20" r="1.4" fill="currentColor" stroke="none"/><path d="M2.5 3h2.2l2 12.2a2 2 0 0 0 2 1.7h8.7a2 2 0 0 0 2-1.6L21 8H6"/></svg><span class="badge-dot" id="cartDotHome" style="display:none"></span></button></div>
 <div class="herocopy">
+<div class="eyebrow">Find it · Make it · Make it yours</div>
+<h1 class="herotitle"><span>Cook it</span><span>your way.</span></h1>
 <p class="herosub" id="heroSub"></p>
 <div class="searchbar">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFC56B" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
 <label for="searchInput" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search recipes</label>
-<input id="searchInput" type="text" placeholder="What sounds good tonight?" autocomplete="off" enterkeyhint="search">
+<input id="searchInput" type="text" placeholder="Search recipes, sauces, rubs…" autocomplete="off" enterkeyhint="search">
 </div>
 </div>
 <div class="scrollcue" aria-hidden="true"></div>
@@ -452,8 +318,6 @@ body::before{opacity:.025}
 <div class="statrow"><div class="stat"><b id="statRecipes">0</b><span>Recipes</span></div><div class="stat"><b id="statCards">0</b><span>Recipe cards</span></div><div class="stat"><b id="statTools">0</b><span>Kitchen tools</span></div></div>
 <div id="searchResults" class="navlist" style="display:none;margin-top:16px"></div>
 <div id="homeBrowse">
-<h2 class="ember-section-title">A little dinner inspiration</h2>
-<div class="ember-featured" id="emberFeatured"></div>
 <div id="continueRow"></div>
 <div class="sectionlabel">The menu</div>
 <h2 class="sechead">What are we <em>cooking?</em></h2>
@@ -2912,7 +2776,7 @@ function labelTexture(sp){
 }
 function initRack3D(){
   var canvas=$('rackCanvas');
-  if(typeof THREE==='undefined'){if(!window._threeLoading){window._threeLoading=1;var sc=document.createElement('script');sc.src='vendor/three.min.js';sc.onload=function(){if($('rackCanvas'))initRack3D()};sc.onerror=function(){var c=$('rackCanvas');if(c)c.parentNode.style.display='none'};document.head.appendChild(sc)}return}
+  if(typeof THREE==='undefined'){loadThree(function(){if($('rackCanvas'))initRack3D()});return}
   var renderer;
   try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true})}catch(e){canvas.parentNode.style.display='none';return}
   if(RACK.stop) RACK.stop();
@@ -4419,7 +4283,7 @@ function SEARCH2(){
   sb.parentNode.insertBefore(w,sb.nextSibling);
   w.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;SEARCH_MODE=b.dataset.m;
     Array.prototype.forEach.call(w.children,function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
-    var inp=$('searchInput');inp.placeholder=SEARCH_MODE==='ing'?'e.g. ground beef, rice, garlic':'What sounds good tonight?';
+    var inp=$('searchInput');inp.placeholder=SEARCH_MODE==='ing'?'e.g. ground beef, rice, garlic':'Search recipes, sauces, rubs…';
     SEARCH2.call(inp);inp.focus()});
 })();
 
@@ -4959,132 +4823,217 @@ function fixSmallImgs(){if(!window.DISH_DATA)return;
   R.forEach(function(r){if(r.img)r.img=DU(r.img)});
   if(typeof ITEM_IMG!=='undefined')for(var k in ITEM_IMG)ITEM_IMG[k].img=DU(ITEM_IMG[k].img);}
 
-/* Ember Skillet. Local artwork, dimensional tilt, coordinated food toss and
-   Canvas steam. No API, video, remote model or rendering service. */
+// load the 3D library after the page is up (hero + spice rack share it)
+var _threeQ=[];function loadThree(cb){if(window.THREE){cb();return}_threeQ.push(cb);if(_threeQ.length>1)return;var sc=document.createElement('script');sc.src='vendor/three.min.js';sc.async=true;sc.onload=function(){var q=_threeQ;_threeQ=[];q.forEach(function(f){try{f()}catch(e){}})};sc.onerror=function(){_threeQ=[]};document.head.appendChild(sc)}
+function startHero(){
+// ==== 3D hero: cast-iron skillet, beef stir-fry, steam, floating spices ====
 (function(){
-  'use strict';
-  var control=document.getElementById('skilletControl');
-  if(!control)return;
-  var art=document.getElementById('skilletArt'),food=document.getElementById('tossArt');
-  var canvas=document.getElementById('scene'),ctx=canvas.getContext('2d');
-  var stage=document.getElementById('emberStage'),tossBtn=document.getElementById('tossBtn');
-  var motionBtn=document.getElementById('motionBtn'),motionText=document.getElementById('motionText');
-  var preference=matchMedia('(prefers-reduced-motion: reduce)');
-  var paused=preference.matches,visible=true,raf=0,last=0,time=0,tossStart=-100;
-  var rx=0,ry=0,targetX=0,targetY=0,vx=0;
-  var drag=null,autoAt=0,width=0,height=0,dpr=1;
-  var particles=Array.from({length:10},function(_,i){return{phase:i/10,x:.37+(i%4)*.06,speed:.11+(i%3)*.018}});
-  function active(){return !paused&&visible&&!document.hidden&&document.getElementById('screenHome').style.display!=='none'&&!document.body.classList.contains('search-active')}
-  function request(){if(!raf&&active()){last=performance.now();raf=requestAnimationFrame(frame)}}
-  function stop(){cancelAnimationFrame(raf);raf=0;last=0}
+  var canvas=document.getElementById('scene');
+  if(!canvas||typeof THREE==='undefined') return;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:'high-performance'})}catch(e){return}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+  
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  var scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x0b0907,.055);
+  var camera=new THREE.PerspectiveCamera(36,1,.1,100);
+  var world=new THREE.Group();scene.add(world);
+  var rig=new THREE.Group();world.add(rig);
+  // seeded random so the food lands the same every load
+  var seed=7;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}
+  // ---- lights ----
+  scene.add(new THREE.HemisphereLight(0xffd9b0,0x1a0c06,.35));
+  var key=new THREE.DirectionalLight(0xfff0dc,1.7);key.position.set(3.5,6,4);key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-4;key.shadow.camera.right=4;key.shadow.camera.top=4;key.shadow.camera.bottom=-4;key.shadow.bias=-.0008;scene.add(key);
+  var rim=new THREE.DirectionalLight(0xff7a2f,2.6);rim.position.set(-5,2.5,-5);scene.add(rim);
+  var rim2=new THREE.DirectionalLight(0xffc56b,1.1);rim2.position.set(5,1.5,-3);scene.add(rim2);
+  var fire=new THREE.PointLight(0xff5a1f,3.2,7,2);fire.position.set(0,-.9,0);scene.add(fire);
+  var glowTop=new THREE.PointLight(0xffa24a,1.2,4,2);glowTop.position.set(0,1.3,.6);scene.add(glowTop);
+  // ---- skillet ----
+  var prof=[[0,0],[1.5,0],[1.66,.04],[1.78,.34],[1.86,.47],[1.8,.5],[1.69,.17],[1.52,.1],[0,.1]].map(function(p){return new THREE.Vector2(p[0],p[1])});
+  var iron=new THREE.MeshStandardMaterial({color:0x0f0d0c,metalness:.45,roughness:.62});
+  var pan=new THREE.Mesh(new THREE.LatheGeometry(prof,96),iron);pan.castShadow=true;pan.receiveShadow=true;rig.add(pan);
+  var handle=new THREE.Mesh(new THREE.CylinderGeometry(.11,.15,1.9,24),iron);handle.rotation.z=Math.PI/2-.18;handle.position.set(2.65,.5,0);handle.castShadow=true;rig.add(handle);
+  var hole=new THREE.Mesh(new THREE.TorusGeometry(.09,.035,12,24),iron);hole.position.set(3.45,.66,0);hole.rotation.y=Math.PI/2;rig.add(hole);
+  var lip=new THREE.Mesh(new THREE.TorusGeometry(.2,.07,12,24,Math.PI),iron);lip.position.set(-1.92,.42,0);lip.rotation.set(Math.PI/2,0,Math.PI/2);rig.add(lip);
+  // ---- stir-fry: beef strips, broccoli, red pepper, snap peas, green onion ----
+  function crustTex(){
+    var c=document.createElement('canvas');c.width=c.height=128;var x=c.getContext('2d');
+    x.fillStyle='#3a1608';x.fillRect(0,0,128,128);
+    var cols=['#1a0703','#2a0d04','#5a2510','#7a3a16','#4a1c08'];
+    for(var i=0;i<700;i++){x.fillStyle=cols[(rnd()*cols.length)|0];x.globalAlpha=.35+rnd()*.6;x.beginPath();x.arc(rnd()*128,rnd()*128,.5+rnd()*2.2,0,6.3);x.fill()}
+    var t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;
+  }
+  var CRUST=crustTex();
+  var food=new THREE.Group();rig.add(food);
+  // glossy sauce bed
+  var sauce=new THREE.Mesh(new THREE.CircleGeometry(1.5,48),new THREE.MeshPhysicalMaterial({color:0x150603,roughness:.3,clearcoat:1,clearcoatRoughness:.25}));
+  sauce.rotation.x=-Math.PI/2;sauce.position.y=.115;sauce.receiveShadow=true;food.add(sauce);
+  var pieces=[];
+  function scatter(geo,mat,n,yBase,sc){
+    var im=new THREE.InstancedMesh(geo,mat,n);im.castShadow=true;im.receiveShadow=true;
+    for(var i=0;i<n;i++){
+      var a=rnd()*Math.PI*2,r=Math.sqrt(rnd())*1.3;
+      pieces.push({m:im,i:i,x:Math.cos(a)*r,z:Math.sin(a)*r,y:yBase+rnd()*.12,rx:(rnd()-.5)*.5,ry:rnd()*6.3,rz:(rnd()-.5)*.5,s:sc*(.8+rnd()*.4),j:.6+rnd()*.8,spin:(rnd()-.5)*8});
+    }
+    food.add(im);return im;
+  }
+  // beef strips
+  var beefG=new THREE.BoxGeometry(.5,.05,.15,8,1,2);
+  (function(){var p=beefG.attributes.position,v=new THREE.Vector3();for(var i=0;i<p.count;i++){v.fromBufferAttribute(p,i);v.y+=Math.sin(v.x*9)*.03+v.x*v.x*.12;v.z*=1+Math.sin(v.x*5)*.15;p.setXYZ(i,v.x,v.y,v.z)}beefG.computeVertexNormals()})();
+  scatter(beefG,new THREE.MeshPhysicalMaterial({map:CRUST,color:0x6a3a24,roughness:.5,clearcoat:.5,clearcoatRoughness:.4}),26,.17,.85);
+  // broccoli florets: stem + crown merged as one mesh each
+  var brocG=new THREE.Group();
+  var stemM=new THREE.MeshStandardMaterial({color:0x7fae4a,roughness:.6}),crownM=new THREE.MeshStandardMaterial({color:0x2f6b1e,roughness:.85,emissive:0x061204});
+  var stemG=new THREE.CylinderGeometry(.04,.055,.18,8),crownG=new THREE.DodecahedronGeometry(.11,1);
+  scatter(stemG,stemM,9,.22,.9);
+  var crowns=scatter(crownG,crownM,9,.34,.9);
+  // tie each crown to its stem
+  for(var k=0;k<9;k++){var st=pieces[pieces.length-18+k],cr=pieces[pieces.length-9+k];cr.x=st.x;cr.z=st.z;cr.ry=st.ry;cr.rx=st.rx;cr.rz=st.rz;cr.y=st.y+.12;cr.j=st.j;cr.spin=st.spin;cr.link=st;st.link=cr}
+  // red pepper strips (curved)
+  var pepG=new THREE.TorusGeometry(.24,.03,6,12,1.3);pepG.scale(1,1,1.6);
+  scatter(pepG,new THREE.MeshPhysicalMaterial({color:0xd8220e,roughness:.25,clearcoat:.9,emissive:0x1a0200}),12,.16,.9);
+  // snap peas
+  var peaG=new THREE.SphereGeometry(1,12,8);peaG.scale(.2,.045,.065);
+  scatter(peaG,new THREE.MeshPhysicalMaterial({color:0x4fa32b,roughness:.35,clearcoat:.6,emissive:0x0a1a04}),12,.18,1);
+  // green onion rings
+  var ringG=new THREE.TorusGeometry(.05,.016,6,12);
+  scatter(ringG,new THREE.MeshStandardMaterial({color:0x8fd14f,roughness:.5}),16,.27,1);
+  // sesame seeds
+  var sesG=new THREE.SphereGeometry(1,6,4);sesG.scale(.022,.009,.014);
+  scatter(sesG,new THREE.MeshStandardMaterial({color:0xf3e3c0,roughness:.5}),50,.31,1);
+  // toss: food jumps every few seconds, or when the pan is tapped
+  var toss=-10,tapAt=0;
+  canvas.addEventListener('pointerup',function(e){if(performance.now()-tapAt<260)toss=t0});
+  canvas.addEventListener('pointerdown',function(){tapAt=performance.now()});
+  function placeFood(){
+    var k=t0-toss,T=.95,u=k>=0&&k<T?k/T:-1;
+    var lift=u>=0?Math.sin(u*Math.PI):0;lift*=.5;
+    rig.position.y=u>=0?Math.sin(u*Math.PI*2)*-.06:0;
+    for(var i=0;i<pieces.length;i++){
+      var p=pieces[i];if(p.link&&p.m===crowns)continue;
+      var h=lift*1.1*p.j,sp=u>=0?p.spin*u:0;
+      dummy.position.set(p.x*(1+lift*.15),p.y+h,p.z*(1+lift*.15));
+      dummy.rotation.set(p.rx+sp*.6,p.ry+sp,p.rz+sp*.4);dummy.scale.setScalar(p.s);dummy.updateMatrix();
+      p.m.setMatrixAt(p.i,dummy.matrix);
+      if(p.link){var c=p.link;dummy.translateY(.13);dummy.updateMatrix();c.m.setMatrixAt(c.i,dummy.matrix)}
+    }
+    for(var m=0;m<food.children.length;m++){var o=food.children[m];if(o.isInstancedMesh)o.instanceMatrix.needsUpdate=true}
+    sauce.position.y=.115;
+  }
+  // ---- floating spices (instanced) ----
+  var floaters=[];
+  function addInstances(geo,mat,count,rMin,rMax,yMin,yMax,scale){
+    var im=new THREE.InstancedMesh(geo,mat,count);im.castShadow=true;
+    var data=[];
+    for(var i=0;i<count;i++){
+      data.push({a:rnd()*Math.PI*2,r:rMin+rnd()*(rMax-rMin),y:yMin+rnd()*(yMax-yMin),s:scale*(.6+rnd()*.8),sp:(.08+rnd()*.18)*(rnd()<.5?-1:1),bob:rnd()*Math.PI*2,rx:rnd()*6,ry:rnd()*6});
+    }
+    floaters.push({mesh:im,data:data});world.add(im);return im;
+  }
+  addInstances(new THREE.IcosahedronGeometry(1,1),new THREE.MeshStandardMaterial({color:0x1c1210,roughness:.7}),34,2.4,4.4,-.3,2.2,.05); // peppercorns
+  addInstances(new THREE.BoxGeometry(1,1,1),new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.15,transmission:0,clearcoat:1,emissive:0x221a14}),26,2.3,4.2,-.2,2.2,.045); // salt crystals
+  addInstances(new THREE.TetrahedronGeometry(1),new THREE.MeshStandardMaterial({color:0xc4281a,roughness:.55,emissive:0x3a0500}),24,2.4,4.5,0,2.2,.06); // chili flakes
+  var leafGeo=new THREE.SphereGeometry(1,12,8);leafGeo.scale(1,.18,.45);
+  addInstances(leafGeo,new THREE.MeshStandardMaterial({color:0x3f7a2a,roughness:.6,emissive:0x0a1a04}),14,2.5,4.4,.2,2.2,.11); // herb leaves
+  // garlic cloves
+  var clove=new THREE.SphereGeometry(1,16,12);clove.scale(.7,1,.55);
+  addInstances(clove,new THREE.MeshStandardMaterial({color:0xf2e6cf,roughness:.45}),5,2.6,4,.4,2,.13);
+  // ---- embers (points) ----
+  function dotTex(soft){
+    var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d');
+    var g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(soft?.15:.25,'rgba(255,255,255,'+(soft?.55:.9)+')');g.addColorStop(1,'rgba(255,255,255,0)');
+    x.fillStyle=g;x.fillRect(0,0,64,64);var t=new THREE.CanvasTexture(c);return t;
+  }
+  var EN=260,epos=new Float32Array(EN*3),ecol=new Float32Array(EN*3),eSpeed=[];
+  var cA=new THREE.Color(0xff6a1f),cB=new THREE.Color(0xffd07a);
+  for(var i=0;i<EN;i++){
+    var a=rnd()*Math.PI*2,r=1+rnd()*5.5;
+    epos[i*3]=Math.cos(a)*r;epos[i*3+1]=-1.5+rnd()*6;epos[i*3+2]=Math.sin(a)*r;
+    var c=cA.clone().lerp(cB,rnd());ecol[i*3]=c.r;ecol[i*3+1]=c.g;ecol[i*3+2]=c.b;
+    eSpeed.push(.15+rnd()*.5);
+  }
+  var eg=new THREE.BufferGeometry();eg.setAttribute('position',new THREE.BufferAttribute(epos,3));eg.setAttribute('color',new THREE.BufferAttribute(ecol,3));
+  var embers=new THREE.Points(eg,new THREE.PointsMaterial({size:.07,map:dotTex(false),vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.9}));
+  world.add(embers);
+  // ---- steam ----
+  var steamTex=dotTex(true),steam=[];
+  for(var s=0;s<26;s++){
+    var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:steamTex,color:0xfff3e6,transparent:true,depthWrite:false,opacity:0}));
+    sp.userData={t:rnd(),x:(rnd()-.5)*1.4,z:(rnd()-.5)*1.4,sp:.12+rnd()*.12,drift:(rnd()-.5)*.6};
+    rig.add(sp);steam.push(sp);
+  }
+  // ---- ground glow disc ----
+  var gl=new THREE.Mesh(new THREE.CircleGeometry(4.5,64),new THREE.MeshBasicMaterial({map:dotTex(true),color:0xff6a1f,transparent:true,opacity:.35,depthWrite:false,blending:THREE.AdditiveBlending}));
+  gl.rotation.x=-Math.PI/2;gl.position.y=-.02;world.add(gl);
+  var shadowCatcher=new THREE.Mesh(new THREE.PlaneGeometry(14,14),new THREE.ShadowMaterial({opacity:.45}));
+  shadowCatcher.rotation.x=-Math.PI/2;shadowCatcher.position.y=-.01;shadowCatcher.receiveShadow=true;world.add(shadowCatcher);
+  // ---- interaction ----
+  var drag={on:false,x:0,vx:0,rot:0,tilt:0,ty:0},pointer={x:0,y:0};
+  canvas.addEventListener('pointerdown',function(e){drag.on=true;drag.x=e.clientX;drag.vx=0});
+  window.addEventListener('pointerup',function(){drag.on=false});
+  window.addEventListener('pointermove',function(e){
+    pointer.x=(e.clientX/window.innerWidth)*2-1;pointer.y=(e.clientY/window.innerHeight)*2-1;
+    if(drag.on){var dx=e.clientX-drag.x;drag.x=e.clientX;drag.vx=dx*.006;drag.rot+=drag.vx}
+  });
+  // ---- sizing / visibility ----
+  var hero=canvas.parentElement,visible=true;
   function size(){
-    width=stage.clientWidth;height=stage.clientHeight;dpr=Math.min(devicePixelRatio||1,1.5);
-    if(canvas.width!==Math.round(width*dpr)||canvas.height!==Math.round(height*dpr)){
-      canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
+    var w=hero.clientWidth,h=hero.clientHeight;if(!w||!h) return;
+    renderer.setSize(w,h,false);camera.aspect=w/h;
+    // pull back on narrow phones so the whole skillet fits
+    var narrow=w/h<.75;camera.fov=narrow?44:34;camera.updateProjectionMatrix();
   }
-  function status(){
-    motionText.textContent=paused?'Play motion':'Pause motion';
-    motionBtn.setAttribute('aria-pressed',String(paused));
-    motionBtn.setAttribute('aria-label',paused?'Play skillet animation':'Pause skillet animation');
-    control.setAttribute('aria-label',paused?'Stir-fry skillet. Motion is paused.':'Toss the stir-fry. Drag horizontally to tilt the skillet.');
-    tossBtn.disabled=paused;tossBtn.style.opacity=paused?'.5':'1';
-    if(paused){stop();ctx.clearRect(0,0,width,height);art.style.transform='none';food.style.opacity='0'}else request();
-  }
-  function toss(){
-    if(paused)return;
-    if(time-tossStart<1.6)return;
-    tossStart=time;autoAt=time+11;
-    stage.dataset.tossCount=String((Number(stage.dataset.tossCount)||0)+1);
-    request();
-  }
-  function frame(now){
-    raf=0;if(!active())return;
-    var dt=Math.min((now-last)/1000,.04);last=now;time+=dt;
-    if(!width)size();
-    if(!drag){vx*=Math.pow(.1,dt);targetY=Math.max(-13,Math.min(13,targetY+vx*dt));targetY*=Math.pow(.5,dt);targetX*=Math.pow(.1,dt)}
-    var blend=1-Math.exp(-dt*9);rx+=(targetX-rx)*blend;ry+=(targetY-ry)*blend;
-    if(!autoAt)autoAt=time+2.6;
-    if(time>autoAt&&!drag)toss();
-    var elapsed=time-tossStart,p=elapsed>=0&&elapsed<1.55?elapsed/1.55:-1;
-    var arc=p>=0?Math.sin(Math.PI*p):0;
-    var jerk=p>=0?Math.sin(p*Math.PI*2)*Math.pow(1-p,2):0;
-    var idle=Math.sin(time*.7)*1.1;
-    art.style.transform='translate3d(0,'+(idle+jerk*height*.026)+'px,0) rotateX('+(rx-jerk*3)+'deg) rotateY('+ry+'deg) rotateZ('+(Math.sin(time*.38)*.5-jerk*2.7)+'deg)';
-    // Food emerges from the pan, follows a compact arc, and disappears back
-    // beneath the settled food. The entire drawing is deterministic.
-    food.style.opacity=arc>0?String(Math.min(1,arc*5)):'.9';
-    if(p>=0){
-      food.style.transform='translate3d('+(Math.sin(p*Math.PI)*width*.035)+'px,'+((1-arc)*height*.31-height*.11)+'px,28px) rotate('+(p*20-10)+'deg) scale('+(0.65+arc*.35)+')';
-    }else{
-      food.style.transform='translate3d(0,'+(-height*.045+Math.sin(time*.7)*2)+'px,24px) rotate(-8deg) scale(.88)';
-    }
-    ctx.clearRect(0,0,width,height);
-    particles.forEach(function(q){
-      var u=(time*q.speed+q.phase)%1;
-      var x=width*(q.x+Math.sin(time*.35+q.phase*5)*.045+u*.035);
-      var y=height*(.62-u*.49);
-      var radius=width*(.018+u*.043);
-      var g=ctx.createRadialGradient(x,y,0,x,y,radius);
-      g.addColorStop(0,'rgba(241,230,213,'+(Math.sin(u*Math.PI)*.055)+')');g.addColorStop(1,'rgba(241,230,213,0)');
-      ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(x,y,radius*.65,radius*1.65,-.3,0,Math.PI*2);ctx.fill();
+  window.addEventListener('resize',size);
+  if('IntersectionObserver' in window){new IntersectionObserver(function(en){visible=en[0].isIntersecting}).observe(hero)}
+  // ---- loop ----
+  var clock=new THREE.Clock(),dummy=new THREE.Object3D(),t0=0;
+  function frame(){
+    requestAnimationFrame(frame);
+    var home=document.getElementById('screenHome');
+    if(!visible||!home||home.style.display==='none'||document.hidden){clock.getDelta();return}
+    if(!canvas.width||canvas.clientWidth!==Math.round(canvas.width/renderer.getPixelRatio())) size();
+    var dt=Math.min(clock.getDelta(),.05);t0+=reduce?0:dt;
+    var scrollP=Math.min(1,Math.max(0,window.scrollY/(hero.clientHeight*.8)));
+    if(!drag.on){drag.vx*=.94;drag.rot+=drag.vx}
+    rig.rotation.y=t0*.18+drag.rot;
+    world.rotation.x+=((pointer.y*.06)-world.rotation.x)*.04;
+    world.rotation.z+=((-pointer.x*.05)-world.rotation.z)*.04;
+    if(!reduce&&t0-toss>5.5)toss=t0;
+    placeFood();
+    // camera: high three-quarter view, dollies in and drops as you scroll
+    var narrow=camera.aspect<.75;
+    camera.position.set(Math.sin(t0*.12)*.6,(narrow?5.2:4.1)-scrollP*1.6,(narrow?7.6:6.4)-scrollP*1.8);
+    camera.lookAt(0,narrow?-.55:.05,0);
+    fire.intensity=3+Math.sin(t0*9)*.35+Math.sin(t0*23)*.25;
+    gl.material.opacity=.3+Math.sin(t0*3)*.05;
+    floaters.forEach(function(f){
+      f.data.forEach(function(d,i){
+        var a=d.a+t0*d.sp;
+        dummy.position.set(Math.cos(a)*d.r,d.y+Math.sin(t0*.9+d.bob)*.18,Math.sin(a)*d.r);
+        dummy.rotation.set(d.rx+t0*.6,d.ry+t0*.4,0);dummy.scale.setScalar(d.s);dummy.updateMatrix();
+        f.mesh.setMatrixAt(i,dummy.matrix);
+      });
+      f.mesh.instanceMatrix.needsUpdate=true;
     });
-    raf=requestAnimationFrame(frame);
+    var p=eg.attributes.position.array;
+    for(var i=0;i<EN;i++){p[i*3+1]+=eSpeed[i]*dt;if(p[i*3+1]>4.8)p[i*3+1]=-1.2}
+    eg.attributes.position.needsUpdate=true;embers.rotation.y=t0*.05;
+    steam.forEach(function(s){
+      var u=s.userData;u.t=(u.t+dt*u.sp)%1;
+      s.position.set(u.x+u.drift*u.t,.7+u.t*2.6,u.z);
+      var sc=.4+u.t*1.6;s.scale.set(sc,sc,1);
+      s.material.opacity=Math.sin(u.t*Math.PI)*.11;
+    });
+    renderer.render(scene,camera);
   }
-  control.addEventListener('pointerdown',function(e){
-    if(paused||!e.isPrimary)return;
-    drag={id:e.pointerId,x:e.clientX,y:e.clientY,lastX:e.clientX,lastAt:performance.now(),distance:0,horizontal:false};
-  });
-  control.addEventListener('pointermove',function(e){
-    if(!drag||drag.id!==e.pointerId)return;
-    var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
-    drag.distance=Math.max(drag.distance,Math.hypot(dx,dy));
-    if(!drag.horizontal&&Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)*1.25){drag.horizontal=true;control.setPointerCapture(e.pointerId)}
-    if(!drag.horizontal)return;
-    var now=performance.now(),delta=e.clientX-drag.lastX;
-    vx=Math.max(-22,Math.min(22,delta/Math.max(8,now-drag.lastAt)*80));
-    targetY=Math.max(-13,Math.min(13,dx*.09));targetX=Math.max(-4,Math.min(4,-dy*.025));
-    drag.lastX=e.clientX;drag.lastAt=now;
-  });
-  function end(e){
-    if(!drag||drag.id!==e.pointerId)return;
-    if(control.hasPointerCapture(e.pointerId))control.releasePointerCapture(e.pointerId);
-    drag=null;
-  }
-  control.addEventListener('pointerup',end);
-  control.addEventListener('pointercancel',function(e){end(e);vx=0;targetX=targetY=0});
-  control.addEventListener('lostpointercapture',function(){drag=null});
-  // Browser click handles keyboard activation too. Suppress the click that
-  // follows a horizontal drag without interfering with vertical page scrolling.
-  var pressX=0,pressY=0;
-  control.addEventListener('pointerdown',function(e){pressX=e.clientX;pressY=e.clientY});
-  control.addEventListener('click',function(e){if(e.detail===0||Math.hypot(e.clientX-pressX,e.clientY-pressY)<8)toss()});
-  tossBtn.addEventListener('click',toss);
-  motionBtn.addEventListener('click',function(){paused=!paused;status()});
-  preference.addEventListener('change',function(e){paused=e.matches;status()});
-  function sync(){
-    var home=parseHash().screen==='home';document.body.classList.toggle('ember-home',home);
-    document.body.classList.toggle('search-active',home&&!!document.getElementById('searchInput').value.trim());
-    if(active())request();else stop();
-  }
-  document.getElementById('searchInput').addEventListener('input',function(){sync();if(this.value.trim())window.scrollTo({top:0,behavior:'instant'})});
-  window.addEventListener('hashchange',sync);
-  document.addEventListener('visibilitychange',sync);
-  if('IntersectionObserver'in window)new IntersectionObserver(function(entries){visible=entries[0].isIntersecting;if(active())request();else stop()},{rootMargin:'80px'}).observe(stage);
-  if('ResizeObserver'in window)new ResizeObserver(size).observe(stage);else window.addEventListener('resize',size);
-  var featured=document.getElementById('emberFeatured');
-  ['entree-mongolian-beef','entree-steakfajitas'].forEach(function(id,index){
-    var item=findItemById(id);
-    if(!item)return;
-    var button=document.createElement('button');button.type='button';button.className='ember-feature';
-    var img=document.createElement('img');img.src=imgFor(item.id)||'img/dish/mongolian-1.jpg';img.alt='';img.loading='lazy';img.width=400;img.height=300;
-    var name=document.createElement('strong');name.textContent=item.label;
-    var label=document.createElement('small');label.textContent=index?'Something fresh for tonight':'A skillet-night favorite';
-    button.append(img,name,label);button.addEventListener('click',function(){openRecipe(item)});featured.appendChild(button);
-  });
-  size();status();sync();
+  size();frame();requestAnimationFrame(function(){canvas.classList.add('ready')});
 })();
+}
+(document.readyState==="complete"?function(f){f()}:function(f){window.addEventListener("load",f)})(function(){loadThree(startHero)});
 
 
 
